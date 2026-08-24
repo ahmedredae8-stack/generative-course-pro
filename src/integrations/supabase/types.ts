@@ -818,7 +818,7 @@ export type Database = {
       lesson_status: "draft" | "published" | "archived"
       project_channel: "team" | "parents" | "admin"
       project_stage: "idea" | "review" | "funding" | "funded" | "rejected"
-      step_kind: "text" | "image" | "video" | "question"
+      step_kind: "text" | "image" | "video" | "question" | "simulation"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -951,7 +951,7 @@ export const Constants = {
       lesson_status: ["draft", "published", "archived"],
       project_channel: ["team", "parents", "admin"],
       project_stage: ["idea", "review", "funding", "funded", "rejected"],
-      step_kind: ["text", "image", "video", "question"],
+      step_kind: ["text", "image", "video", "question", "simulation"],
     },
   },
 } as const
