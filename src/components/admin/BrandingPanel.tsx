@@ -44,6 +44,7 @@ export function BrandingPanel() {
 
   return (
     <div className="space-y-3">
+      <ThemePanel />
       <p className="text-xs font-bold text-muted-foreground">
         غيّر اللوجو وصور الروبوت في أي وقت — التغيير يظهر فوراً لكل المستخدمين.
       </p>
