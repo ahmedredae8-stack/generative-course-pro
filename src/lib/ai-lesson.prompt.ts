@@ -26,6 +26,12 @@ export const AiLessonInput = z.object({
     .optional(),
   /** Ask the model to rewrite the lesson objectives + summary too. */
   withMeta: z.boolean().optional(),
+  /** Short bios so every character keeps a consistent personality. */
+  characterBios: z.array(z.object({ name: z.string(), bio: z.string().default("") })).default([]),
+  /** Raw source article the lesson must be built from. */
+  article: z.string().default(""),
+  /** "physics" makes the model design interactive simulations instead of plain text. */
+  mode: z.enum(["chat", "physics"]).default("chat"),
 });
 
 export const AiUnitInput = z.object({
@@ -35,16 +41,29 @@ export const AiUnitInput = z.object({
   /** Free text: goals, ideas, tools, or anything the admin wants covered. */
   brief: z.string().min(5),
   lessonCount: z.number().int().min(3).max(12).default(10),
+  /** Full source article / curriculum text the unit must be built from. */
+  article: z.string().default(""),
+  mode: z.enum(["chat", "physics"]).default("chat"),
 });
 
+export type AiSim = {
+  title?: string;
+  description?: string;
+  vars: { key: string; label: string; min: number; max: number; step?: number; value: number; unit?: string }[];
+  outputs?: { label: string; expr: string; unit?: string; decimals?: number }[];
+  scene?: { kind?: string; x?: string; y?: string; size?: string; duration?: number; ground?: boolean; color?: string };
+  task?: string;
+};
+
 export type AiStep = {
-  kind: "text" | "image" | "question";
+  kind: "text" | "image" | "question" | "simulation";
   character: string | null;
   mood: string;
   content: string;
   admin_note?: string | null;
   choices?: string[];
   answer?: number;
+  sim?: AiSim;
 };
 
 export type AiLessonResult = {
@@ -75,6 +94,8 @@ ${CAST_RULES}
 - أضف سؤالاً واحداً على الأقل كل 4-6 رسائل.
 - التزم بعدد الرسائل المطلوب إن ذُكر (±2).
 - إن طُلب objectives و summary_points: 3 أهداف تبدأ بفعل واضح («تعرف…»، «تستخدم…»، «تصمّم…») وتصف ما سيتقنه الطالب فعلاً في هذا الدرس تحديداً، و3 نقاط خلاصة قصيرة.
+- إن أُعطيت لك «المقال المصدر» فالتزم بمعلوماته وحقائقه ولا تخرج عنه، ووزّع محتواه على الرسائل بترتيب منطقي مع قصة وربط بين الرسائل.
+- إن أُعطيت أوصاف الشخصيات فالتزم بشخصية كل واحد وطريقة كلامه.
 أعد JSON فقط بالشكل: {"objectives":[...],"summary_points":[...],"steps":[...]}`;
 
 export const AI_UNIT_SYSTEM = `أنت مصمّم مناهج عربية تفاعلية بأسلوب دولينجو.
@@ -87,3 +108,17 @@ ${CAST_RULES}
 - objectives: 3 أهداف تبدأ بفعل واضح («تعرف…»، «تستخدم…»، «تصمّم…») وتخص هذا الدرس تحديداً. لا تكرر عنوان الدرس كهدف ولا تكتب أهدافاً عامة.
 - summary_points: 3 نقاط خلاصة قصيرة.
 أعد JSON فقط بالشكل: {"lessons":[{"title":"","description":"","intro_text":"","objectives":["","",""],"summary_points":["","",""]}]}`;
+
+
+/** Extra rules for the interactive physics course. */
+export const AI_PHYSICS_RULES = `هذا كورس تجارب فيزيائية تفاعلية، لذلك:
+- استخدم kind = "simulation" مرة على الأقل كل 4-6 رسائل: تجربة يلعب بها الطالب بنفسه.
+- عنصر simulation يحتوي حقل sim بالشكل:
+  {"title":"","description":"","vars":[{"key":"m","label":"الكتلة","min":1,"max":20,"step":0.5,"value":5,"unit":"كجم"}],
+   "outputs":[{"label":"القوة","expr":"m*a","unit":"نيوتن","decimals":2}],
+   "scene":{"kind":"ball","x":"10 + 80*(t/3)","y":"10","size":"5 + m","duration":3,"ground":true},
+   "task":"جرّب زيادة الكتلة ولاحظ ماذا يحدث للتسارع."}
+- key لكل متغير حرف/كلمة إنجليزية بدون مسافات، وتُستخدم داخل expr.
+- expr صيغة رياضية بلغة JavaScript فقط (+ - * / ** Math.sin Math.cos Math.sqrt) وتستعمل مفاتيح المتغيرات و t (الزمن بالثواني).
+- x و y و size تعطي أرقاماً من 0 إلى 100 (نسبة من مساحة المشهد) — اجعل الحركة صحيحة فيزيائياً حسب القانون.
+- اشرح القانون في رسالة نصية قبل التجربة، واسأل سؤالاً بعدها عن العلاقة التي لاحظها الطالب.`;
