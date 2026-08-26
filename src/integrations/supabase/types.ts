@@ -49,6 +49,62 @@ export type Database = {
           },
         ]
       }
+      ai_jobs: {
+        Row: {
+          article: string
+          attempts: number
+          brief: string
+          character_ids: string[]
+          created_at: string
+          error: string | null
+          id: string
+          lesson_id: string
+          mode: string
+          msg_count: number
+          priority: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          article?: string
+          attempts?: number
+          brief?: string
+          character_ids?: string[]
+          created_at?: string
+          error?: string | null
+          id?: string
+          lesson_id: string
+          mode?: string
+          msg_count?: number
+          priority?: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          article?: string
+          attempts?: number
+          brief?: string
+          character_ids?: string[]
+          created_at?: string
+          error?: string | null
+          id?: string
+          lesson_id?: string
+          mode?: string
+          msg_count?: number
+          priority?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_jobs_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       characters: {
         Row: {
           avatar_url: string | null
