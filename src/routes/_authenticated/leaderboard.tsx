@@ -30,7 +30,7 @@ function LeaderboardPage() {
     queryKey: ["leaderboard"],
     queryFn: async (): Promise<Row[]> => {
       const { data, error } = await supabase
-        .from("public_profiles" as never)
+        .from("public_profiles")
         .select("id, display_name, username, avatar_url, xp")
         .order("xp", { ascending: false })
         .limit(50);
