@@ -11,12 +11,13 @@ import { LessonEditor, MOODS } from "@/components/admin/LessonEditor";
 import { CoursesPanel } from "@/components/admin/CoursesPanel";
 import { BrandingPanel } from "@/components/admin/BrandingPanel";
 import { UnitBuilder } from "@/components/admin/UnitBuilder";
+import { ContentFactory } from "@/components/admin/ContentFactory";
 import { MASCOT_MOODS } from "@/lib/mascotMoods";
 import { uploadFile } from "@/lib/upload";
 import { toast } from "sonner";
 import {
   Loader2, Users, GraduationCap, Rocket, MessageCircle, Trash2, Plus, ShieldCheck, Save,
-  Ban, Pencil, Bell, Upload, ShieldOff, CheckCircle2, BookOpen, Image as ImageIcon,
+  Ban, Pencil, Bell, Upload, ShieldOff, CheckCircle2, BookOpen, Image as ImageIcon, Factory,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
