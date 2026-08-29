@@ -69,7 +69,7 @@ function AdminPage() {
           <h1 className="text-2xl font-extrabold">لوحة الأدمن</h1>
         </div>
 
-        <div className="grid grid-cols-4 sm:grid-cols-7 gap-1 bg-secondary p-1 rounded-2xl mb-5 text-[10px] sm:text-sm">
+        <div className="grid grid-cols-4 sm:grid-cols-8 gap-1 bg-secondary p-1 rounded-2xl mb-5 text-[10px] sm:text-sm">
           <TabBtn active={tab === "students"} onClick={() => setTab("students")} icon={<Users className="w-4 h-4" />} label="الطلاب" />
           <TabBtn active={tab === "courses"} onClick={() => setTab("courses")} icon={<BookOpen className="w-4 h-4" />} label="الكورسات" />
           <TabBtn active={tab === "lessons"} onClick={() => setTab("lessons")} icon={<GraduationCap className="w-4 h-4" />} label="الدروس" />
@@ -77,6 +77,7 @@ function AdminPage() {
           <TabBtn active={tab === "projects"} onClick={() => setTab("projects")} icon={<Rocket className="w-4 h-4" />} label="المشاريع" />
           <TabBtn active={tab === "notify"} onClick={() => setTab("notify")} icon={<Bell className="w-4 h-4" />} label="إشعارات" />
           <TabBtn active={tab === "branding"} onClick={() => setTab("branding")} icon={<ImageIcon className="w-4 h-4" />} label="المظهر" />
+          <TabBtn active={tab === "factory"} onClick={() => setTab("factory")} icon={<Factory className="w-4 h-4" />} label="المصنع" />
         </div>
 
         {tab === "students" && <StudentsPanel />}
@@ -86,6 +87,7 @@ function AdminPage() {
         {tab === "projects" && <ProjectsPanel />}
         {tab === "notify" && <NotifyPanel />}
         {tab === "branding" && <BrandingPanel />}
+        {tab === "factory" && <ContentFactory />}
       </main>
       <BottomNav />
       {lesson && <LessonEditor lessonId={lesson} onClose={() => navigate({ to: "/admin", search: {} })} />}
