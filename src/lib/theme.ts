@@ -6,7 +6,7 @@ import { useSiteSettings } from "@/lib/siteSettings";
  * The admin can switch the whole platform between the purple identity and the
  * older blue one, or set a fully custom primary colour.
  */
-export type PresetId = "purple" | "blue" | "green" | "sunset";
+export type PresetId = "purple" | "blue" | "green" | "sunset" | "nilo";
 
 type Vars = Record<string, string>;
 
@@ -93,6 +93,28 @@ export const THEME_PRESETS: { id: PresetId; label: string; swatch: string; vars:
       "--input": "oklch(0.93 0.02 60)",
       "--ring": "oklch(0.66 0.2 45)",
       "--gem": "oklch(0.72 0.15 80)",
+    },
+  },
+  {
+    // Nilo — matches the mascot: cyan-blue ibis feathers + orange beak accent
+    id: "nilo",
+    label: "نيلو",
+    swatch: "#2bb6e8",
+    vars: {
+      "--background": "oklch(0.99 0.012 225)",
+      "--foreground": "oklch(0.22 0.05 245)",
+      "--primary": "oklch(0.68 0.15 230)",
+      "--primary-shadow": "oklch(0.55 0.14 235)",
+      "--secondary": "oklch(0.95 0.04 225)",
+      "--secondary-foreground": "oklch(0.4 0.12 235)",
+      "--muted": "oklch(0.96 0.015 225)",
+      "--muted-foreground": "oklch(0.5 0.03 235)",
+      "--accent": "oklch(0.74 0.17 55)",
+      "--accent-shadow": "oklch(0.62 0.17 50)",
+      "--border": "oklch(0.9 0.025 225)",
+      "--input": "oklch(0.92 0.025 225)",
+      "--ring": "oklch(0.68 0.15 230)",
+      "--gem": "oklch(0.74 0.14 215)",
     },
   },
 ];

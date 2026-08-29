@@ -1,0 +1,59 @@
+name: Build Android (unsigned APK + AAB)
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Install Capacitor
+        run: bun add @capacitor/core @capacitor/cli @capacitor/android
+
+      - name: Build web assets
+        run: bun run build
+
+      - name: Ensure webDir exists
+        run: mkdir -p dist && [ -f dist/index.html ] || echo '<!doctype html><meta http-equiv="refresh" content="0;url=https://generative-course-pro.lovable.app">' > dist/index.html
+
+      - name: Add Android platform
+        run: bunx cap add android
+
+      - name: Sync Capacitor
+        run: bunx cap sync android
+
+      - name: Build unsigned APK
+        working-directory: android
+        run: ./gradlew assembleRelease
+
+      - name: Build unsigned AAB
+        working-directory: android
+        run: ./gradlew bundleRelease
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nilex-android-unsigned
+          path: |
+            android/app/build/outputs/apk/release/*.apk
+            android/app/build/outputs/bundle/release/*.aab
+          if-no-files-found: error
