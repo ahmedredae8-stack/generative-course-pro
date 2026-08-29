@@ -37,7 +37,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminPage,
 });
 
-type Tab = "students" | "courses" | "lessons" | "characters" | "projects" | "notify" | "branding";
+type Tab = "students" | "courses" | "lessons" | "characters" | "projects" | "notify" | "branding" | "factory";
 
 function AdminPage() {
   const { data: isAdmin, isLoading } = useIsAdmin();
