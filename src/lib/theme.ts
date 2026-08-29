@@ -6,7 +6,7 @@ import { useSiteSettings } from "@/lib/siteSettings";
  * The admin can switch the whole platform between the purple identity and the
  * older blue one, or set a fully custom primary colour.
  */
-export type PresetId = "purple" | "blue" | "green" | "sunset";
+export type PresetId = "purple" | "blue" | "green" | "sunset" | "nilo";
 
 type Vars = Record<string, string>;
 
