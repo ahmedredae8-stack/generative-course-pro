@@ -50,11 +50,11 @@ jobs:
 
       - name: Update to modern Google Play target and dependencies
         run: |
-          # تحديث إعدادات الـ SDK لضمان التوافق مع أحدث متطلبات متجر بلاي (Android 15 / API 35 وما فوق)
-          sed -i 's/compileSdkVersion = .*/compileSdkVersion = 35/g' android/build.gradle || true
-          sed -i 's/targetSdkVersion = .*/targetSdkVersion = 35/g' android/build.gradle || true
-          sed -i 's/compileSdk .*/compileSdk 35/g' android/app/build.gradle || true
-          sed -i 's/targetSdk .*/targetSdk 35/g' android/app/build.gradle || true
+          # تحديث إعدادات الـ SDK إلى الإصدار 36 المطلوب تماماً
+          sed -i 's/compileSdkVersion = .*/compileSdkVersion = 36/g' android/build.gradle || true
+          sed -i 's/targetSdkVersion = .*/targetSdkVersion = 36/g' android/build.gradle || true
+          sed -i 's/compileSdk .*/compileSdk 36/g' android/app/build.gradle || true
+          sed -i 's/targetSdk .*/targetSdk 36/g' android/app/build.gradle || true
 
       - name: Set App Icon and Bump Version Code
         run: |
