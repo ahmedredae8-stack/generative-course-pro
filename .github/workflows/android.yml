@@ -41,6 +41,18 @@ jobs:
       - name: Sync Capacitor
         run: bunx cap sync android
 
+      - name: Force update package name in android project
+        run: |
+          sed -i 's/applicationId ".*"/applicationId "app.lovable.nilex"/g' android/app/build.gradle
+
+      - name: Update to modern Google Play target and dependencies
+        run: |
+          # تحديث إعدادات الـ SDK لضمان التوافق مع أحدث متطلبات متجر بلاي (Android 15 / API 35 وما فوق)
+          sed -i 's/compileSdkVersion = .*/compileSdkVersion = 35/g' android/build.gradle || true
+          sed -i 's/targetSdkVersion = .*/targetSdkVersion = 35/g' android/build.gradle || true
+          sed -i 's/compileSdk .*/compileSdk 35/g' android/app/build.gradle || true
+          sed -i 's/targetSdk .*/targetSdk 35/g' android/app/build.gradle || true
+
       - name: Build unsigned APK
         working-directory: android
         run: ./gradlew assembleRelease
