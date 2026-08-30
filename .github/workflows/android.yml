@@ -29,6 +29,9 @@ jobs:
       - name: Install Capacitor
         run: bun add @capacitor/core @capacitor/cli @capacitor/android
 
+      - name: Install Capacitor Assets generator
+        run: bun add -D @capacitor/assets || true
+
       - name: Build web assets
         run: bun run build
 
@@ -52,6 +55,20 @@ jobs:
           sed -i 's/targetSdkVersion = .*/targetSdkVersion = 35/g' android/build.gradle || true
           sed -i 's/compileSdk .*/compileSdk 35/g' android/app/build.gradle || true
           sed -i 's/targetSdk .*/targetSdk 35/g' android/app/build.gradle || true
+
+      - name: Set App Icon and Bump Version Code
+        run: |
+          # توليد وضبط الأيقونة المخصصة من مسار apple-touch-icon.png تلقائياً
+          if [ -f "public/apple-touch-icon.png" ]; then
+            mkdir -p assets
+            cp public/apple-touch-icon.png assets/icon.png
+            npx capacitor-assets generate --android || true
+          fi
+
+          # رفع رقم الإصدار (versionCode) و(versionName) تلقائياً لتجاوز قيود متجر بلاي للنسخ
+          BUILD_NUM=${{ github.run_number }}
+          sed -i "s/versionCode [0-9]*/versionCode $((BUILD_NUM + 1000))/g" android/app/build.gradle || true
+          sed -i 's/versionName ".*"/versionName "1.0.${{ github.run_number }}"/g' android/app/build.gradle || true
 
       - name: Build unsigned APK
         working-directory: android
