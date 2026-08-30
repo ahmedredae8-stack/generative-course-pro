@@ -44,22 +44,27 @@ jobs:
       - name: Sync Capacitor
         run: bunx cap sync android
 
-      - name: Force update package name and SDK 36 in android project
+      - name: Force update package name and SDK 36 properly
         run: |
           # تحديث اسم الحزمة
           sed -i 's/applicationId ".*"/applicationId "app.lovable.nilex"/g' android/app/build.gradle
 
-          # تعديل صريح ومباشر لإصدارات الـ SDK إلى 36 لمنع خطأ AAR metadata
-          sed -i 's/compileSdkVersion = [0-9]*/compileSdkVersion = 36/g' android/build.gradle || true
-          sed -i 's/targetSdkVersion = [0-9]*/targetSdkVersion = 36/g' android/build.gradle || true
+          # تحديث إعدادات الإصدارات في ملف الجذر (project build.gradle) إذا كانت موجودة
+          if [ -f "android/build.gradle" ]; then
+            sed -i 's/compileSdkVersion = [0-9]*/compileSdkVersion = 36/g' android/build.gradle || true
+            sed -i 's/targetSdkVersion = [0-9]*/targetSdkVersion = 36/g' android/build.gradle || true
+            sed -i 's/minSdkVersion = [0-9]*/minSdkVersion = 24/g' android/build.gradle || true
+          fi
+
+          # تحديث المتغيرات بملف الـ app build.gradle بطريقة سليمة لا تسبب أخطاء
+          sed -i 's/compileSdkVersion rootProject.ext.compileSdkVersion/compileSdkVersion 36/g' android/app/build.gradle || true
+          sed -i 's/targetSdkVersion rootProject.ext.targetSdkVersion/targetSdkVersion 36/g' android/app/build.gradle || true
+          sed -i 's/compileSdk = [0-9]*/compileSdk 36/g' android/app/build.gradle || true
+          sed -i 's/targetSdk = [0-9]*/targetSdk 36/g' android/app/build.gradle || true
+          
+          # استبدال مباشر لإصدار الـ SDK في حال قراءة مباشرة
           sed -i 's/compileSdk [0-9]*/compileSdk 36/g' android/app/build.gradle || true
           sed -i 's/targetSdk [0-9]*/targetSdk 36/g' android/app/build.gradle || true
-
-          # في حال لم يتم العثور على المتغيرات بالطريقة السابقة، نقوم بحقنها مباشرة داخل defaultConfig
-          if ! grep -q "compileSdk 36" android/app/build.gradle; then
-            echo "Injecting compileSdk 36 directly..."
-            sed -i '/defaultConfig {/a \    compileSdk 36\n    targetSdk 36' android/app/build.gradle || true
-          fi
 
       - name: Set App Icon and Bump Version Code
         run: |
