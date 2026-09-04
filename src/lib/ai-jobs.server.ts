@@ -125,11 +125,12 @@ async function runJob(job: JobRow): Promise<string> {
     const char = cast.find((c) => c.name.trim() === (s.character ?? "").trim());
     const isQ = s.kind === "question" && Array.isArray(s.choices) && s.choices.length >= 2;
     const isImg = s.kind === "image";
+    const isVid = s.kind === "video";
     const isSim = s.kind === "simulation" && !!s.sim && Array.isArray(s.sim.vars) && s.sim.vars.length > 0;
     return {
       lesson_id: lessonId,
       order_index: i + 1,
-      kind: isSim ? "simulation" : isQ ? "question" : isImg ? "image" : "text",
+      kind: isSim ? "simulation" : isQ ? "question" : isVid ? "video" : isImg ? "image" : "text",
       content: s.content,
       media_url: isImg ? DEFAULT_IMAGE : null,
       admin_note: s.admin_note?.trim() || null,
