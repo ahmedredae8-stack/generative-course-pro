@@ -391,6 +391,14 @@ function LessonsPanel() {
             <button onClick={() => navigate({ to: "/admin", search: { lesson: l.id } })} className="p-2 rounded-lg text-primary hover:bg-primary/10" aria-label="تحرير">
               <Pencil className="w-4 h-4" />
             </button>
+            {l.status !== "published" && (
+              <button
+                onClick={() => updateStatus(l.id, "published")}
+                className="text-[11px] px-2 py-1 rounded-lg bg-emerald-500 text-white font-extrabold"
+              >
+                نشر
+              </button>
+            )}
             <select value={l.status} onChange={(e) => updateStatus(l.id, e.target.value as "draft" | "published" | "archived")} className="text-xs px-2 py-1 rounded-lg border-2 border-input bg-background font-extrabold">
               <option value="draft">مسودة</option>
               <option value="published">منشور</option>
